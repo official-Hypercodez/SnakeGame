@@ -4,10 +4,36 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Game Ep-2</title>
+    <title>Snake Game</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+        body{
+            height:100vh;
+            display:grid;
+            justify-content: center;
+            align-content: center;
+        }
+        .score{
+            font-family: arial;
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            align-items: center;
+            border: 2px solid black;
+        }
+    </style>
 </head>
 <body>
-
+    <div class="score">
+        <span id="highscore">0</span>
+        <span id="cscore">0</span>
+    </div>
     <canvas id="canvas" width="400px" height="400px" style="border: 2px solid black;"></canvas>
 
     <script>
@@ -24,6 +50,15 @@
             snake.push({x:i,y:0});
         }
 
+        let score=0;
+        // display high score
+        let highscore=document.getElementById("highscore");
+        if(localStorage.getItem("snakescore")){
+            highscore.innerText="High Score " + localStorage.getItem("snakescore");
+        }else{
+            highscore.innerText=0;
+        }
+        // draw food function
         function drawfood(){
             var x=Math.floor(Math.random()*15);
             var y=Math.floor(Math.random()*15);
@@ -81,6 +116,11 @@
 
             if(food.x===head.x && food.y===head.y){
                 snake.push(head);
+                score+=1;
+                document.getElementById("cscore").innerText=score;
+                if(score >= localStorage.getItem("snakescore")){
+                    localStorage.setItem("snakescore",score);
+                }
                 for(var i=0;i<snake.length;i++){
                     if(drawfood().x === snake[i].x && drawfood().y===snake[i].y){
                         drawfood()
